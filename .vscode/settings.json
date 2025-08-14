@@ -1,0 +1,12 @@
+{
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "App",
+            "database": "local.db"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}

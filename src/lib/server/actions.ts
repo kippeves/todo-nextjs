@@ -3,6 +3,7 @@ import { cache } from "react";
 import { db } from "@/lib/server/db";
 import { eq } from "drizzle-orm";
 import { todos } from "./db/schema";
+import { dbTodo } from "../../../types";
 
 export const getTodos = cache(async () => await db.select().from(todos));
 
@@ -13,5 +14,5 @@ export const getTodo = async (id: number) => {
         where: eq(todos.id, searchId),
       })
   );
-  return cacheItem(id);
+  return cacheItem(id) as Promise<dbTodo>;
 };
