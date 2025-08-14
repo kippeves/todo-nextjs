@@ -18,6 +18,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
+import { dbTodo } from "../../../types";
 
 const todoSchema = z.object({
   value: z
@@ -35,7 +36,7 @@ const todoSchema = z.object({
 
 type TodoFormData = z.infer<typeof todoSchema>;
 
-export function TodoForm() {
+export function TodoForm({ data }: { data?: dbTodo }) {
   const {
     control,
     handleSubmit,
@@ -45,11 +46,11 @@ export function TodoForm() {
   } = useForm<TodoFormData>({
     resolver: zodResolver(todoSchema),
     defaultValues: {
-      value: "",
-      description: "",
-      finished: 0,
-      alarmDate: 0,
-      priority: 0,
+      value: data?.value ?? "",
+      description: data?.description ?? "",
+      finished: data?.finished ?? 0,
+      alarmDate: data?.alarmDate ?? 0,
+      priority: data?.priority ?? 0,
     },
   });
 
@@ -87,9 +88,9 @@ export function TodoForm() {
   };
 
   return (
-    <Card>
+    <Card className="w-xl">
       <CardHeader>
-        <CardTitle>Create New Todo</CardTitle>
+        <CardTitle>{data ? "Update Todo": "Create new Todo"}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -196,7 +197,13 @@ export function TodoForm() {
           </div>
 
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            {isSubmitting ? "Adding..." : "Add Todo"}
+            {isSubmitting
+              ? data
+                ? "Updating..."
+                : "Adding..."
+              : data
+              ? "Update Todo"
+              : "Add Todo"}
           </Button>
         </form>
       </CardContent>

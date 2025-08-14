@@ -11,6 +11,7 @@ import {
   CardFooter,
 } from "../ui/card";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 interface TodoProps {
   todo?: dbTodo;
@@ -18,12 +19,11 @@ interface TodoProps {
 }
 
 export default function Todo({ todo, promise }: TodoProps) {
-  
   let data = todo ? todo : promise ? use(promise) : undefined;
 
   if (!data) return <div>Not found</div>;
 
-  const { alarmDate, description, value: title } = data;
+  const { id, alarmDate, description, value: title } = data;
 
   const alarmIsSet = alarmDate !== null && alarmDate > 0;
   return (
@@ -32,17 +32,14 @@ export default function Todo({ todo, promise }: TodoProps) {
         <CardTitle>{title}</CardTitle>
         {alarmIsSet && <CardDescription>Hi</CardDescription>}
         <CardAction>
-          <Button>Edit</Button>
+          <Button asChild>
+            <Link href={`/todos/${id}`}>Edit</Link>
+          </Button>
         </CardAction>
       </CardHeader>
       <CardContent>
         <p>{description}</p>
       </CardContent>
-      <CardFooter className="flex-col gap-2">
-        <Button variant={"outline"} className="w-full">
-          Button
-        </Button>
-      </CardFooter>
     </Card>
   );
 }
