@@ -8,7 +8,6 @@ import {
   CardDescription,
   CardAction,
   CardContent,
-  CardFooter,
 } from "../ui/card";
 import { Button } from "../ui/button";
 import Link from "next/link";
@@ -19,7 +18,7 @@ interface TodoProps {
 }
 
 export default function Todo({ todo, promise }: TodoProps) {
-  let data = todo ? todo : promise ? use(promise) : undefined;
+  const data = todo ? todo : promise ? use(promise) : undefined;
 
   if (!data) return <div>Not found</div>;
 

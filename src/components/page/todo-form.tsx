@@ -65,7 +65,7 @@ export function TodoForm({ data }: { data?: dbTodo }) {
 
       // Reset form
       reset();
-    } catch (error) {
+    } catch {
       toast.warning("Error", {
         description: "Failed to add todo. Please try again.",
       });
@@ -90,7 +90,7 @@ export function TodoForm({ data }: { data?: dbTodo }) {
   return (
     <Card className="w-xl">
       <CardHeader>
-        <CardTitle>{data ? "Update Todo": "Create new Todo"}</CardTitle>
+        <CardTitle>{data ? "Update Todo" : "Create new Todo"}</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

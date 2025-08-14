@@ -1,9 +1,8 @@
 import { db } from "@/lib/server/db";
 import { todos } from "@/lib/server/db/schema";
 import { createInsertSchema } from "drizzle-zod";
-import { NextRequest } from "next/server";
 
-export async function GET(request: Request) {
+export async function GET() {
   // For example, fetch data from your DB here
   const todoRequest = await db.select().from(todos);
   return new Response(JSON.stringify({ todos: todoRequest }), {
@@ -12,7 +11,7 @@ export async function GET(request: Request) {
   });
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   const insertObject = await request.json();
   const todoValidator = createInsertSchema(todos);
   const insert = await todoValidator.safeParseAsync(insertObject);

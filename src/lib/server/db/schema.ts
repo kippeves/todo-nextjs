@@ -26,7 +26,7 @@ export const tags = sqliteTable("tags", {
     DB Relations
 */
 
-export const todosRelations = relations(todos, ({ one, many }) => ({
+export const todosRelations = relations(todos, ({ many }) => ({
   tags: many(tags),
 }));
 

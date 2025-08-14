@@ -10,9 +10,7 @@ import { Button } from "../ui/button";
 export default function TodoFetcher() {
   const [fetchId, setFetchId] = useState(0);
   const [promise, setPromise] = useState<Promise<dbTodo>>();
-  async function serverFetch(
-    _: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) {
+  async function serverFetch() {
     setPromise(getTodo(fetchId));
   }
 
@@ -35,7 +33,7 @@ export default function TodoFetcher() {
             <Button
               type="button"
               variant="outline"
-              onClick={(e) => serverFetch(e)}
+              onClick={() => serverFetch()}
             >
               Load
             </Button>
