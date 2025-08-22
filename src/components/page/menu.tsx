@@ -10,7 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Home, Plus, PlusCircleIcon, Search } from "lucide-react";
+import { Home,  PlusCircleIcon, Search } from "lucide-react";
 import Link from "next/link";
 
 export function AppSidebar() {

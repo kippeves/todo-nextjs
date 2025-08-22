@@ -11,35 +11,38 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { SearchContext } from "../providers/search-provider";
 
 function SearchArea() {
-  const { query, setQuery } = useContext(SearchContext)!;
+  const { query, setQuery,setPage } = useContext(SearchContext)!;
   const searchParams = useSearchParams();
   const params = useMemo(
     () => new URLSearchParams(searchParams),
     [searchParams]
   );
   const { replace } = useRouter();
-  const [original, setOriginal] = useState<string>(query);
+  const [original, setOriginal] = useState<string>(query ?? "");
   const [debounce, setDebouncedQuery] = useState(original);
   const pathname = usePathname();
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      if (debounce !== original) params.delete("page");
+      if (debounce !== original) {
+        params.delete("page");
+        setPage(undefined)
+      }
       setDebouncedQuery(original);
     }, 500);
     return () => clearTimeout(handler);
-  }, [debounce, original, params]);
+  }, [debounce, original, params, setPage]);
 
   useEffect(() => {
     if (debounce) {
       setQuery(debounce);
       params.set("query", debounce);
     } else {
-      setQuery("");
+      setQuery(undefined);
       params.delete("query");
     }
-    
-    //replace(`${pathname}${params && "?" + params.toString()}`);
+
+
     window.history.pushState(
       { path: `${pathname}${params && "?" + params.toString()}` },
       "",

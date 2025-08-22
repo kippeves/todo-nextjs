@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
   Pagination,
   PaginationContent,
@@ -23,37 +23,28 @@ import { getTodos, searchTodos } from "@/app/lib/server/actions";
 import { usePathname, useSearchParams } from "next/navigation";
 
 export default function TodoList() {
-  const { query } = useContext(SearchContext)!;
+  const { query, page } = useContext(SearchContext)!;
   const [result, setResult] = useState<FetchResult<Todo[]>>();
-  const searchParams = useSearchParams();
-
-  const params = useMemo(
-    () => new URLSearchParams(searchParams),
-    [searchParams]
-  );
-  const page = params.get("page");
 
   useEffect(() => {
     const search = async (query: string) => {
-      const task =
-        query.length > 0
-          ? page
-            ? searchTodos({ term: query, page: page })
-            : searchTodos({ term: query })
-          : getTodos();
-      await task.then((e) => {
-        console.dir(e);
-        setResult(e);
-      });
+      const task = !query.length
+        ? getTodos(page)
+        : page
+        ? searchTodos({ term: query, page: page.toString() })
+        : searchTodos({ term: query });
+      await task.then(setResult);
     };
 
-    search(query);
+    search(query ?? "");
   }, [page, query]);
+
+  const pageIndex = (page ?? 1) - 1;
 
   return (
     result &&
     result.type === "success" && (
-      <>
+      <div className="flex flex-col w-7xl gap-4">
         <Table>
           <TableHeader>
             <TableRow>
@@ -68,7 +59,7 @@ export default function TodoList() {
           <TableBody>
             {result.data.map((item, index) => (
               <TableRow key={item.id}>
-                <TableCell>{(Number(page) - 1) * 20 + index + 1}</TableCell>
+                <TableCell>{pageIndex * 20 + (index + 1)}</TableCell>
                 <TableCell>{item.title}</TableCell>
                 <TableCell>{item.description}</TableCell>
                 <TableCell>
@@ -87,32 +78,37 @@ export default function TodoList() {
           </TableBody>
         </Table>
         <PaginationList pages={result._pages} />
-      </>
+      </div>
     )
   );
 }
 
 function PaginationList({ pages }: { pages: number }) {
+  const { page, setPage } = useContext(SearchContext)!;
   const currentParams = useSearchParams();
   const path = usePathname();
   const params = new URLSearchParams(currentParams);
-  const currentPage = currentParams.get("page")
-    ? Number(currentParams.get("page"))
-    : 1;
 
-  const getPrev = () => {
+  const currentPage = page ?? 1;
+  const setState = () =>
+    window.history.replaceState({ path }, "", `${path}?${params}`);
+  const getPrev = async () => {
     params.set("page", (currentPage - 1).toString());
-    return `${path}?${params}`;
+    setPage(currentPage - 1);
+    setState();
+    //return `${path}?${params}`;
   };
 
-  const getLink = (page: number) => {
+  const getLink = async (page: number) => {
     params.set("page", page.toString());
-    return `${path}?${params}`;
+    setPage(page);
+    setState();
   };
 
-  const getNext = () => {
+  const getNext = async () => {
     params.set("page", (currentPage + 1).toString());
-    return `${path}?${params}`;
+    setPage(currentPage + 1);
+    setState();
   };
 
   return (
@@ -120,22 +116,27 @@ function PaginationList({ pages }: { pages: number }) {
       <PaginationContent>
         {currentPage > 1 && (
           <PaginationItem>
-            <PaginationPrevious href={getPrev()} />
+            <PaginationPrevious onClick={getPrev} />
           </PaginationItem>
         )}
-        {Array.from({ length: pages }).map((_, i) => (
-          <PaginationItem key={i}>
-            <PaginationLink
-              isActive={i === currentPage - 1}
-              href={getLink(i + 1)}
-            >
-              {i + 1}
-            </PaginationLink>
-          </PaginationItem>
-        ))}
+        {Array.from({ length: pages }).map((_, i) => {
+          const index = i + 1;
+          if (index <= currentPage + 3 && index >= currentPage - 3) {
+            return (
+              <PaginationItem key={i}>
+                <PaginationLink
+                  isActive={i === currentPage - 1}
+                  onClick={() => getLink(i + 1)}
+                >
+                  {i + 1}
+                </PaginationLink>
+              </PaginationItem>
+            );
+          }
+        })}
         {currentPage !== pages && (
           <PaginationItem>
-            <PaginationNext href={getNext()} />
+            <PaginationNext onClick={getNext} />
           </PaginationItem>
         )}
       </PaginationContent>

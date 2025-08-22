@@ -8,7 +8,6 @@ import { Textarea } from "../../ui/textarea";
 import rehypeSanitize from "rehype-sanitize";
 import rehypeStringify from "rehype-stringify";
 import { Card, CardContent } from "@/components/ui/card";
-import styles from "./mdx-parser.module.css";
 import { Button } from "@/components/ui/button";
 
 function MdxParser() {

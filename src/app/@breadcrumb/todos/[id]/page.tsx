@@ -6,7 +6,6 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { Fragment } from "react";
-import { getTodo } from "@/lib/server/actions";
 
 export default async function BreadcrumbSlot({
   params,
@@ -18,9 +17,6 @@ export default async function BreadcrumbSlot({
   if (isNaN(idVal)) {
     return <></>;
   }
-  // Fetch our cat information from the database
-  const todo = await getTodo(idVal);
-  if (!todo) return <>Not Found</>;
 
   const links = [
     {
@@ -42,7 +38,7 @@ export default async function BreadcrumbSlot({
         );
       })}
       <BreadcrumbItem>
-        <BreadcrumbPage className="capitalize">{todo.value}</BreadcrumbPage>
+        <BreadcrumbPage className="capitalize">Todo</BreadcrumbPage>
       </BreadcrumbItem>
     </BreadcrumbList>
   );
