@@ -10,9 +10,5 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <div className="flex flex-col gap-2">
-      {children}
-    </div>
-  );
+  return children;
 }

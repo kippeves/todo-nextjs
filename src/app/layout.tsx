@@ -6,6 +6,7 @@ import { AppSidebar } from "@/components/page/menu";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "sonner";
 import { cookies } from "next/headers";
+import SearchArea from "@/components/page/search-area";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,12 +45,15 @@ export default async function RootLayout({
         >
           <SidebarProvider defaultOpen={defaultOpen}>
             <AppSidebar />
-            <div className="flex-col w-full">
-              <nav className="flex px-2 py-4 gap-4 border-b items-center">
-                <SidebarTrigger />
-                {breadcrumb}
+            <div className="flex flex-col w-full">
+              <nav className="flex px-2 py-4 gap-4 border-b justify-between">
+                <div className="flex items-center gap-4">
+                  <SidebarTrigger className="flex-nowrap" />
+                  {breadcrumb}
+                </div>
+                <SearchArea />
               </nav>
-              <main className="p-4">{children}</main>
+              <main className="flex grow justify-center p-4">{children}</main>
             </div>
           </SidebarProvider>
         </ThemeProvider>

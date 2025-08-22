@@ -1,10 +1,11 @@
-import TodoFetcher from "@/components/page/todo-fetcher";
+import CenterLayout from "@/components/page/center-layout";
+import TodoList from "@/components/page/todo-list";
 import React from "react";
 
 export default async function Page() {
   return (
-    <div className="flex flex-col gap-4 justify-center items-center">
-      <TodoFetcher />
-    </div>
+    <CenterLayout>
+      <TodoList />
+    </CenterLayout>
   );
 }

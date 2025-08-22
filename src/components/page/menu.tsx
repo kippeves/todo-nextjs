@@ -1,4 +1,3 @@
-
 import {
   Sidebar,
   SidebarContent,
@@ -11,7 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Home, Search } from "lucide-react";
+import { Home, Plus, PlusCircleIcon, Search } from "lucide-react";
 import Link from "next/link";
 
 export function AppSidebar() {
@@ -24,8 +23,13 @@ export function AppSidebar() {
     {
       title: "Get One",
       url: "/todos/search",
-      icon: Search
-    }
+      icon: Search,
+    },
+    {
+      title: "Add ToDo",
+      url: "/todos/add",
+      icon: PlusCircleIcon,
+    },
   ];
   return (
     <Sidebar variant="sidebar" collapsible="icon">
