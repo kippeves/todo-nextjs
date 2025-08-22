@@ -25,7 +25,7 @@ export async function HandleFetch<T>(uri: string, params?: { [key: string]: stri
         const value = await res.json();
         const parse = await Todos.safeParseAsync(value);
         return parse.success ?
-            { type: "success", data: parse.data, _total: total, _pages: total && total % limit } as result :
+            { type: "success", data: parse.data, _total: total, _pages: total && Math.ceil(total / limit) } as result :
             { type: "error", error: parse.error.message } as result
     }).catch(e => {
         return (
